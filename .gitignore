@@ -1,0 +1,35 @@
+
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temp files
+*.tmp
+*.temp
+
+# Build output (if any)
+dist/
+build/
+
+# Telegram bot files (if you save downloaded media)
+downloads/
+
+# VS Code settings
+.vscode/
+
+# Mac system files
+*.swp
