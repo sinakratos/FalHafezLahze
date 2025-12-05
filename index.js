@@ -46,6 +46,7 @@ const BUTTONS = {
   RETRY: '🔮  دوباره نیت کن',
   POSTCARD: '🎁  دریافت کارت‌پستال',
 };
+
 bot.start(async (ctx) => {
   const channelInvText = `لطفا در چنل ساخت کیوآرکد ما عضو بشین
 چون براتون یه آفر جذاب گذاشتیم: کارت‌پستال موزیکال
@@ -59,13 +60,7 @@ bot.start(async (ctx) => {
       inline_keyboard: [
         [
           {
-            text: '📢 لینک کانال',
-            url: 'https://t.me/lahzeqrcode',
-          },
-        ],
-        [
-          {
-            text: '🔄 عضو شدم',
+            text: '🔮 نیت کن و فال بگیر ',
             callback_data: 'check_join',
           },
         ],
@@ -87,24 +82,27 @@ bot.action('check_join', async (ctx) => {
       show_alert: true,
     });
   }
+  await ctx.answerCbQuery();
 
-  // Success → show the Fal button
-  return ctx.editMessageText('🎉 عالی! حالا نیت کن تا فالت رو بدم:', {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          {
-            text: '✨ نیت کن',
-            callback_data: 'wish',
-          },
-        ],
+  const poem = pickRandomPoemForUser();
+
+  await ctx.reply(poem);
+
+  await ctx.reply(
+    'آیا فالت درست درآمد؟',
+    Markup.inlineKeyboard([
+      [
+        Markup.button.callback('✅ آره درست بود', 'correct_yes'),
+        Markup.button.callback('❌ نه درست نبود', 'correct_no'),
       ],
-    },
-  });
+    ])
+  );
 });
 
 // handle the "wish" callback -> show random fal
 bot.action('wish', async (ctx) => {
+  console.log('x');
+
   try {
     await ctx.answerCbQuery();
   } catch (e) {}
@@ -152,7 +150,6 @@ bot.action('correct_yes', async (ctx) => {
   try {
     await ctx.answerCbQuery();
   } catch (e) {}
-  const userId = String(ctx.from.id);
 
   const text = `ای ول! 🎉
 اگه خواستی بهش حرفتو بزنی، از ما کارت‌پستال موزیکال بگیر و قبل از اینکه دیر بشه حرفتو برسون 🎙️❤️`;
@@ -186,7 +183,6 @@ bot.action('correct_no', async (ctx) => {
   );
 });
 
-// graceful shutdown
 process.once('SIGINT', () => {
   console.log('SIGINT, stopping bot...');
   bot.stop('SIGINT');
@@ -198,7 +194,6 @@ process.once('SIGTERM', () => {
   process.exit(0);
 });
 
-// start bot (polling)
 bot
   .launch()
   .then(() => {
