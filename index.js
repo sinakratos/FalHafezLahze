@@ -101,8 +101,6 @@ bot.action('check_join', async (ctx) => {
 
 // handle the "wish" callback -> show random fal
 bot.action('wish', async (ctx) => {
-  console.log('x');
-
   try {
     await ctx.answerCbQuery();
   } catch (e) {}
