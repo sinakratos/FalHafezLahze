@@ -170,17 +170,6 @@ bot.action('correct_yes', async (ctx) => {
   );
 });
 
-// handle postcard CTA (placeholder - adapt to your postcard flow)
-bot.action('get_postcard', async (ctx) => {
-  try {
-    await ctx.answerCbQuery();
-  } catch (e) {}
-  // Provide instructions or link to channel / web form
-  await ctx.reply(
-    'برای دریافت کارت‌پستال موزیکال لطفاً به کانال ما در لینک زیر مراجعه کنید:\nhttps://t.me/lahzeqrcode\n\nدر کانال، دستورالعمل‌های لازم برای سفارش کارت‌پستال را خواهید یافت. ممنون که با ما همراهی می‌کنید! 🎁📬'
-  );
-});
-
 // handle NO
 bot.action('correct_no', async (ctx) => {
   try {
