@@ -34,17 +34,24 @@ function pickRandomPoemForUser() {
   const poem = Array.isArray(entry.poem) ? entry.poem.join('\n') : entry.poem;
   const tafsir = entry.interpretation || '';
 
-  const reply = `🎯 ${entry.title}\n\n${poem}\n\n📜 تفسیر / معنی:\n${tafsir}`;
+  const reply = `${poem}\n\n📜 تفسیر / معنی:\n${tafsir}`;
   return reply;
 }
 
-// glass-style inline button text helper (we simulate glass with emojis and spaced text)
+// glass-style inline button text helper
 const BUTTONS = {
-  WISH: '🔮  نیت کن و فال خود را بگیر',
   YES: '✅  آره درست بود',
   NO: '❌  نه، درست نبود',
   RETRY: '🔮  دوباره نیت کن',
   POSTCARD: '🎁  دریافت کارت‌پستال',
+};
+
+const persistentKeyboard = {
+  reply_markup: {
+    keyboard: [[{ text: '/start' }]],
+    resize_keyboard: true,
+    one_time_keyboard: true,
+  },
 };
 
 bot.start(async (ctx) => {
@@ -55,6 +62,7 @@ bot.start(async (ctx) => {
 '📢 عضویت در کانال 
  https://t.me/lahzeqrcode
 `;
+
   ctx.reply(channelInvText, {
     reply_markup: {
       inline_keyboard: [
@@ -67,6 +75,10 @@ bot.start(async (ctx) => {
       ],
     },
   });
+});
+
+bot.on('message', async (ctx) => {
+  await ctx.reply('برای شروع، دکمه زیر را بزنید:', persistentKeyboard);
 });
 
 bot.action('check_join', async (ctx) => {
@@ -92,8 +104,8 @@ bot.action('check_join', async (ctx) => {
     'آیا فالت درست درآمد؟',
     Markup.inlineKeyboard([
       [
-        Markup.button.callback('✅ آره درست بود', 'correct_yes'),
-        Markup.button.callback('❌ نه درست نبود', 'correct_no'),
+        Markup.button.callback(BUTTONS.YES, 'correct_yes'),
+        Markup.button.callback(BUTTONS.NO, 'correct_no'),
       ],
     ])
   );
@@ -136,8 +148,8 @@ bot.action('wish', async (ctx) => {
     'آیا فالت درست درآمد؟',
     Markup.inlineKeyboard([
       [
-        Markup.button.callback('✅ آره درست بود', 'correct_yes'),
-        Markup.button.callback('❌ نه درست نبود', 'correct_no'),
+        Markup.button.callback(BUTTONS.YES, 'correct_yes'),
+        Markup.button.callback(BUTTONS.NO, 'correct_no'),
       ],
     ])
   );
@@ -154,7 +166,7 @@ bot.action('correct_yes', async (ctx) => {
 
   await ctx.reply(
     text,
-    Markup.inlineKeyboard([[Markup.button.callback(BUTTONS.POSTCARD, 'get_postcard')]])
+    Markup.inlineKeyboard([[Markup.button.url(BUTTONS.POSTCARD, 'https://t.me/lahzeqrcode')]])
   );
 });
 
